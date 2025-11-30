@@ -23,11 +23,14 @@ pub fn build(b: *std.Build) void {
         .imports = &.{.{ .name = "zigmkay", .module = zigmkay_mod }},
     });
 
-    const firmware = mb.add_firmware(.{
-        .name = "zigmkay",
+    const kb_names = .{"clackychan"};
+   
+inline for(kb_names) |name| {
+    const kb = mb.add_firmware(.{
+        .name = name,
         .target = &target,
         .optimize = optimize,
-        .root_source_file = b.path("src/clackychan/main.zig"),
+        .root_source_file = b.path(   std.fmt.comptimePrint("src/{s}/main.zig", .{name})  ),
         .imports = &.{
             // TOOD: Move back to normal imports once working
             // .{ .name = "zigmkay", .module = zigmkay_mod },
@@ -35,9 +38,13 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    firmware.add_app_import("zigmkay", zigmkay_mod, .{ .depend_on_microzig = true });
-
+    kb.add_app_import("zigmkay", zigmkay_mod, .{ .depend_on_microzig = true });
     // We call this twice to demonstrate that the default binary output for
     // RP2040 is UF2, but we can also output other formats easily
-    mb.install_firmware(firmware, .{});
+    mb.install_firmware(kb, .{});
+}
+    
+
+        
+    
 }
