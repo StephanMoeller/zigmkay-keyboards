@@ -1,7 +1,7 @@
 .{
-    .name = .clackychan_jb,
+    .name = .zigmkay_keyboard,
     .version = "0.0.0",
-    .fingerprint = 0x2daa5d84554bd0e3, // Changing this has security and trust implications.
+    .fingerprint = 0xda9671d261da5247, // Changing this has security and trust implications.
     .minimum_zig_version = "0.15.2",
     .dependencies = .{
         .zigmkay = .{

@@ -23,11 +23,14 @@ pub fn build(b: *std.Build) void {
         .imports = &.{.{ .name = "zigmkay", .module = zigmkay_mod }},
     });
 
-    const firmware = mb.add_firmware(.{
-        .name = "zigmkay",
+    const kbname = b.option([]const u8, "kbname", "Target Microsoft Windows") orelse @panic("missing kb");
+    var buffer : [1000]u8 = undefined;
+    const final_slice=  std.fmt.bufPrint(&buffer,"src/{s}/main.zig", .{kbname}) catch @panic("error!");
+    const kb = mb.add_firmware(.{
+        .name = kbname,
         .target = &target,
         .optimize = optimize,
-        .root_source_file = b.path("src/clackychan/main.zig"),
+        .root_source_file = b.path(final_slice),
         .imports = &.{
             // TOOD: Move back to normal imports once working
             // .{ .name = "zigmkay", .module = zigmkay_mod },
@@ -35,9 +38,12 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    firmware.add_app_import("zigmkay", zigmkay_mod, .{ .depend_on_microzig = true });
-
+    kb.add_app_import("zigmkay", zigmkay_mod, .{ .depend_on_microzig = true });
     // We call this twice to demonstrate that the default binary output for
     // RP2040 is UF2, but we can also output other formats easily
-    mb.install_firmware(firmware, .{});
+    mb.install_firmware(kb, .{});
+    
+
+        
+    
 }
