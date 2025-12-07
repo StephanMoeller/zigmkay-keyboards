@@ -1,5 +1,5 @@
 const std = @import("std");
-
+const flash = @import("zig_flash");
 const microzig = @import("microzig");
 
 const MicroBuild = microzig.MicroBuild(.{
@@ -24,8 +24,8 @@ pub fn build(b: *std.Build) void {
     });
 
     const kbname = b.option([]const u8, "kbname", "Target Microsoft Windows") orelse @panic("missing kb");
-    var buffer : [1000]u8 = undefined;
-    const final_slice=  std.fmt.bufPrint(&buffer,"src/{s}/main.zig", .{kbname}) catch @panic("error!");
+    var buffer: [1000]u8 = undefined;
+    const final_slice = std.fmt.bufPrint(&buffer, "src/{s}/main.zig", .{kbname}) catch @panic("error!");
     const kb = mb.add_firmware(.{
         .name = kbname,
         .target = &target,
@@ -42,8 +42,8 @@ pub fn build(b: *std.Build) void {
     // We call this twice to demonstrate that the default binary output for
     // RP2040 is UF2, but we can also output other formats easily
     mb.install_firmware(kb, .{});
-    
 
-        
-    
+    const flash_dep = b.dependency("zig_flash", .{});
+    const flash_exe = flash_dep.artifact("zig_flash");
+    _ = flash.addFlashStep(b, flash_exe, .{ .input_name = kbname, .mount_point = "" });
 }

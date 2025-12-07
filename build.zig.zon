@@ -11,6 +11,10 @@
             .url = "https://github.com/ZigEmbeddedGroup/microzig/releases/download/0.15.0/microzig.tar.gz",
             .hash = "microzig-0.15.0-D20YSTUgCADpOaRtQ4SOk0HJ_E4342rgS9m3LQGhITbd",
         },
+        .zig_flash = .{
+            .url = "git+https://codeberg.org/BSF/zig-flash.git#6018dd9b143256922666efdfe5f801ba8d0499ce",
+            .hash = "zig_flash-0.0.0-yRHpSbkhAACD9VP2DgWJtj49b5Nh_d3Cr8kYSAe08SX8",
+        },
     },
     .paths = .{
         "build.zig",
