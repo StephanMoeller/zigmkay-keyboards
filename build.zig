@@ -6,12 +6,15 @@ const MicroBuild = microzig.MicroBuild(.{
     .rp2xxx = true,
 });
 
+var string_buffer: [1000]u8 = undefined;
 pub fn build(b: *std.Build) void {
-    const mz_dep = b.dependency("microzig", .{});
-    const mb = MicroBuild.init(b, mz_dep) orelse return;
+    const mb = MicroBuild.init(b, b.dependency("microzig", .{})) orelse return;
 
     const target = mb.ports.rp2xxx.boards.raspberrypi.pico.*; //  b.standardTargetOptions(.{});
     const optimize: std.builtin.OptimizeMode = .ReleaseSafe; //b.standardOptimizeOption(.{});
+
+    // Options
+    const kbname = b.option([]const u8, "kbname", "Target Microsoft Windows") orelse @panic("missing kb");
 
     const zigmkay_dep = b.dependency("zigmkay", .{});
     const zigmkay_mod = zigmkay_dep.module("zigmkay");
@@ -23,14 +26,11 @@ pub fn build(b: *std.Build) void {
         .imports = &.{.{ .name = "zigmkay", .module = zigmkay_mod }},
     });
 
-    const kbname = b.option([]const u8, "kbname", "Target Microsoft Windows") orelse @panic("missing kb");
-    var buffer: [1000]u8 = undefined;
-    const final_slice = std.fmt.bufPrint(&buffer, "src/{s}/main.zig", .{kbname}) catch @panic("error!");
     const kb = mb.add_firmware(.{
         .name = kbname,
         .target = &target,
         .optimize = optimize,
-        .root_source_file = b.path(final_slice),
+        .root_source_file = b.path(std.fmt.bufPrint(&string_buffer, "src/{s}/main.zig", .{kbname}) catch @panic("error!")),
         .imports = &.{
             // TOOD: Move back to normal imports once working
             // .{ .name = "zigmkay", .module = zigmkay_mod },
@@ -45,5 +45,9 @@ pub fn build(b: *std.Build) void {
 
     const flash_dep = b.dependency("zig_flash", .{});
     const flash_exe = flash_dep.artifact("zig_flash");
-    _ = flash.addFlashStep(b, flash_exe, .{ .input_name = kbname, .mount_point = "" });
+
+    _ = flash.addFlashStep(b, flash_exe, .{
+        .input_name = std.fmt.bufPrint(&string_buffer, "{s}.uf2", .{kbname}) catch @panic("error!"),
+        .mount_point = "F:/",
+    });
 }
