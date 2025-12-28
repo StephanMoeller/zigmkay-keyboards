@@ -156,7 +156,6 @@ pub const combos = [_]core.Combo2Def{
     Combo_Tap(.{ 20, 21 }, L_ARROWS, dk.BSLS),
 
     Combo_Custom(.{ 0, 9 }, L_BASE, ENABLE_GAMING),
-    Combo_Custom(.{ 0, 9 }, L_GAMING, DISABLE_GAMING),
     Combo_Custom(.{ 1, 3 }, L_ARROWS, EQ_COL),
 };
 
