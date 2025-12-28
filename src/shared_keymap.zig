@@ -74,10 +74,10 @@ pub const keymap = [_][key_count]core.KeyDef{
    },
     // GAMING
     .{
-           NONE,    NONE,    NONE,    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    NONE,
+           T(us.ESCAPE),    NONE,    NONE,    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(DISABLE_GAMING),
            NONE, T(dk.A), T(dk.S), T(dk.T),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
            NONE,    NONE,    NONE,    NONE,                            NONE,       NONE,       NONE,        T(us.ESCAPE),
-                                        T(us.SPACE),                  NONE
+                                        T(us.ENTER),                  T(us.SPACE)
     },
 };
 
@@ -270,6 +270,12 @@ fn SFT(keycode_fire: core.KeyCodeFire) core.KeyDef {
 const ENABLE_GAMING = 1;
 const DISABLE_GAMING = 2;
 const EQ_COL = 3;
+
+fn custom_key(custom_key_val: u8) core.KeyDef {
+    return core.KeyDef{
+        .tap_only = .{ .custom = custom_key_val },
+    };
+}
 
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
