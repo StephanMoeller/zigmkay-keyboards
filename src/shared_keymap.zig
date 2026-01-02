@@ -31,22 +31,22 @@ pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
          T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T( dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
-                    T(dk.X),   T(dk.C),         LT(L_NUM,dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
-                                            C(us.ENTER, CUSTOM_LEFT_HOLD),                  C( us.SPACE, CUSTOM_RIGHT_HOLD)
+                    T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
+                                            C(us.ENTER, CUSTOM_HOLD_LEFT),                  C( us.SPACE, CUSTOM_HOLD_RIGHT)
     },
     // L_ARROWS
     .{
    T(dk.EXLM),    T(dk.LABK),    GUI(dk.EQL),          T(dk.RABK), T(dk.PERC),             T(dk.SLSH),  T(us.HOME),   AF_fast(us.UP),    T(us.END),  T(dk.APP),
     T(dk.AT), ALT(dk.LCBR), CTL(dk.LPRN),   SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
                   T(dk.HASH),   T(dk.LBRC),  T(dk.RBRC),    _______,                _______,   T(dk.TAB),  CTL(dk.DQUO),      T(us.ESC),
-                                                        C(us.SPACE, CUSTOM_LEFT_HOLD),                _______
+                                                        C(us.SPACE, CUSTOM_HOLD_LEFT),                _______
     },
     // L_NUM
     .{
-       _______,  _______,    _______,     _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
+       _______,  TC(CUSTOM_TAP_ALT_TAB),    _______,     _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
        _______,     UNDO,       REDO,     _______, _______,                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), _______,
                T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
-                                                   _______,                C( us.N0, CUSTOM_RIGHT_HOLD)
+                                                   _______,                C( us.N0, CUSTOM_HOLD_RIGHT)
     },
     // L_EMPTY
     .{
@@ -71,9 +71,9 @@ pub const keymap = [_][key_count]core.KeyDef{
    },
     // GAMING
     .{
-           T(us.ESCAPE),    NONE,    NONE,    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(DISABLE_GAMING),
+           T(us.ESCAPE),    NONE,    NONE,    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
            NONE, T(dk.A), T(dk.S), T(dk.T),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
-           NONE,    NONE,    NONE,    NONE,                            NONE,       NONE,       NONE,        T(us.ESCAPE),
+           T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        T(us.ESCAPE),
                                         T(us.ENTER),                  T(us.SPACE)
     },
 };
@@ -152,8 +152,8 @@ pub const combos = [_]core.Combo2Def{
 
     Combo_Tap(.{ 20, 21 }, L_ARROWS, dk.BSLS),
 
-    Combo_Custom(.{ 0, 9 }, L_BASE, ENABLE_GAMING),
-    Combo_Custom(.{ 1, 3 }, L_ARROWS, EQ_COL),
+    Combo_Custom(.{ 0, 9 }, L_BASE, CUSTOM_TAP_ENABLE_GAMING),
+    Combo_Custom(.{ 1, 3 }, L_ARROWS, CUSTOM_TAP_EQ_COL),
 };
 
 // For now, all these shortcuts are placed in the custom keymap to let the user know how they are defined
@@ -222,6 +222,11 @@ fn WinNav(keycode: core.KeyCodeFire) core.KeyDef {
         .tap_only = .{ .key_press = .{ .tap_keycode = keycode.tap_keycode, .tap_modifiers = .{ .left_gui = true } } },
     };
 }
+fn TC(custom_key_code: u8) core.KeyDef {
+    return core.KeyDef{
+        .tap_only = .{ .custom = custom_key_code },
+    };
+}
 fn T(keycode_fire: core.KeyCodeFire) core.KeyDef {
     return core.KeyDef{
         .tap_only = .{ .key_press = keycode_fire },
@@ -264,9 +269,13 @@ fn SFT(keycode_fire: core.KeyCodeFire) core.KeyDef {
     };
 }
 
-const ENABLE_GAMING = 1;
-const DISABLE_GAMING = 2;
-const EQ_COL = 3;
+const CUSTOM_TAP_ENABLE_GAMING = 1;
+const CUSTO_TAP_DISABLE_GAMING = 2;
+const CUSTOM_TAP_EQ_COL = 3;
+const CUSTOM_TAP_ALT_TAB: u8 = 4;
+
+const CUSTOM_HOLD_LEFT: u8 = 1;
+const CUSTOM_HOLD_RIGHT: u8 = 2;
 
 fn custom_key(custom_key_val: u8) core.KeyDef {
     return core.KeyDef{
@@ -274,46 +283,56 @@ fn custom_key(custom_key_val: u8) core.KeyDef {
     };
 }
 
-const CUSTOM_LEFT_HOLD: u8 = 1;
-const CUSTOM_RIGHT_HOLD: u8 = 2;
 var left_held = false;
 var right_held = false;
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
         .OnHoldEnterAfter => |e| {
-            if (e.hold.custom == CUSTOM_LEFT_HOLD) {
+            if (e.hold.custom == CUSTOM_HOLD_LEFT) {
                 left_held = true;
             }
-            if (e.hold.custom == CUSTOM_RIGHT_HOLD) {
+            if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = true;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_NUM, left_held);
             layers.set_layer_state(L_ARROWS, right_held);
-            var mods = output_queue.get_current_modifiers();
-            mods.right_shift = left_held and !right_held;
-            output_queue.set_mods(mods) catch {};
         },
         .OnHoldExitAfter => |e| {
-            if (e.hold.custom == CUSTOM_LEFT_HOLD) {
+            if (e.hold.custom == CUSTOM_HOLD_LEFT) {
                 left_held = false;
+                // if releasing left key, also ensure alt (as part of alt tab) is no longer held
+                if (output_queue.current_mods.left_alt) {
+                    var mods = output_queue.current_mods;
+                    mods.left_alt = false;
+                    output_queue.set_mods(mods) catch {};
+                }
             }
-            if (e.hold.custom == CUSTOM_RIGHT_HOLD) {
+            if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = false;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_NUM, left_held);
             layers.set_layer_state(L_ARROWS, right_held);
-            var mods = output_queue.get_current_modifiers();
-            mods.right_shift = left_held and !right_held;
-            output_queue.set_mods(mods) catch {};
+        },
+        .OnTapEnterAfter => |data| {
+            if (data.tap.custom == CUSTOM_TAP_ALT_TAB) {
+                if (!output_queue.current_mods.left_alt) {
+                    var mods = output_queue.current_mods;
+                    mods.left_alt = true;
+                    output_queue.set_mods(mods) catch {};
+                }
+                output_queue.tap_key(us.TAB) catch {};
+            }
         },
         .OnTapEnterBefore => |data| {
-            if (data.tap.custom == ENABLE_GAMING) {
+            if (data.tap.custom == CUSTOM_TAP_ENABLE_GAMING) {
                 layers.set_layer_state(L_GAMING, true);
             }
-            if (data.tap.custom == DISABLE_GAMING) {
+            if (data.tap.custom == CUSTO_TAP_DISABLE_GAMING) {
                 layers.set_layer_state(L_GAMING, false);
             }
-            if (data.tap.custom == EQ_COL) {
+            if (data.tap.custom == CUSTOM_TAP_EQ_COL) {
                 output_queue.tap_key(us.SPACE) catch {};
                 output_queue.tap_key(dk.COLN) catch {};
                 output_queue.tap_key(dk.EQL) catch {};
