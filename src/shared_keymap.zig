@@ -21,9 +21,6 @@ const L_BOTH:usize = 4;
 const L_WIN:usize = 5;
 const L_GAMING:usize = 6;
 
-const L_LEFT = L_NUM;
-const L_RIGHT = L_ARROWS;
-
 pub const sides = [key_count]core.Side{
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
@@ -33,7 +30,7 @@ pub const sides = [key_count]core.Side{
 pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
-         T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T(dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
+         LT(L_NUM, dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T(dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
                     T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
                                             C(us.ENTER, CUSTOM_LEFT_HOLD),                  C( us.SPACE, CUSTOM_RIGHT_HOLD)
     },
@@ -56,7 +53,7 @@ pub const keymap = [_][key_count]core.KeyDef{
             _______, _______, _______, _______, _______,                _______, _______, _______, _______, _______,
             _______, _______, _______, _______, _______,                _______, _______, _______, _______, _______,
                      _______, _______, _______, _______,                _______, _______, _______, _______,
-                                             LT(L_LEFT, us.ENTER),                  LT(L_RIGHT, us.SPACE)
+                                             _______,                  _______
 
     },
     // BOTH
@@ -288,15 +285,19 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = true; }
             if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = true; }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_LEFT, left_held);
-            layers.set_layer_state(L_RIGHT, right_held);
+            layers.set_layer_state(L_ARROWS, right_held);
+            var mods = output_queue.get_current_modifiers();        
+            mods.right_shift = left_held and !right_held;
+            output_queue.set_mods(mods) catch {};
         },
         .OnHoldExitAfter => |e| {
             if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = false; }
             if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = false; }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_LEFT, left_held);
-            layers.set_layer_state(L_RIGHT, right_held);
+            layers.set_layer_state(L_ARROWS, right_held);
+            var mods = output_queue.get_current_modifiers();
+            mods.right_shift = left_held and !right_held;
+            output_queue.set_mods(mods) catch {};
         },
         .OnTapEnterBefore => |data| {
             if (data.tap.custom == ENABLE_GAMING) {
