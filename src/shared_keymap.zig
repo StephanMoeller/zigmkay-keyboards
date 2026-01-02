@@ -35,21 +35,21 @@ pub const keymap = [_][key_count]core.KeyDef{
          T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
          T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T(dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
                     T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
-                                             LT(L_LEFT, us.ENTER),                  LT(L_RIGHT, us.SPACE)
+                                            C(us.ENTER, CUSTOM_LEFT_HOLD),                  C( us.SPACE, CUSTOM_RIGHT_HOLD)
     },
     // L_ARROWS
     .{
    T(dk.EXLM),    T(dk.LABK),    GUI(dk.EQL),          T(dk.RABK), T(dk.PERC),             T(dk.SLSH),  T(us.HOME),   AF_fast(us.UP),    T(us.END),  T(dk.APP),
     T(dk.AT), ALT(dk.LCBR), CTL(dk.LPRN),   SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
                   T(dk.HASH),   T(dk.LBRC),  T(dk.RBRC),    _______,                _______,   T(dk.TAB),  CTL(dk.DQUO),      T(us.ESC),
-                                                        LT(L_LEFT, us.SPACE),                _______
+                                                        C(us.SPACE, CUSTOM_LEFT_HOLD),                _______
     },
     // L_NUM
     .{
-       _______,  _______,    _______,     _______, _______,                  _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
+       _______,  _______,    _______,     _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
        _______,     UNDO,       REDO,     _______, _______,                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), _______,
-               T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,              PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
-                                          LT(L_LEFT, us.SPACE),             LT(L_RIGHT, us.N0)
+               T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
+                                                   _______,                C( us.N0, CUSTOM_RIGHT_HOLD)
     },
     // L_EMPTY
     .{
@@ -209,6 +209,8 @@ fn MO(layer_index: core.LayerIndex) core.KeyDef {
         .hold = .{ .hold_layer = layer_index },
     };
 }
+
+
 fn LT(layer_index: core.LayerIndex, keycode_fire: core.KeyCodeFire) core.KeyDef {
     return core.KeyDef{
         .tap_hold = .{
@@ -276,13 +278,25 @@ fn custom_key(custom_key_val: u8) core.KeyDef {
     };
 }
 
+const CUSTOM_LEFT_HOLD:u8 = 1;
+const CUSTOM_RIGHT_HOLD :u8= 2;
+var left_held = false;
+var right_held = false;
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
-        .OnHoldEnterAfter => |_| {
-            layers.set_layer_state(L_BOTH, layers.is_layer_active(L_LEFT) and layers.is_layer_active(L_RIGHT));
+        .OnHoldEnterAfter => |e| {
+            if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = true; }
+            if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = true; }
+            layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_LEFT, left_held);
+            layers.set_layer_state(L_RIGHT, right_held);
         },
-        .OnHoldExitAfter => |_| {
-            layers.set_layer_state(L_BOTH, layers.is_layer_active(L_LEFT) and layers.is_layer_active(L_RIGHT));
+        .OnHoldExitAfter => |e| {
+            if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = false; }
+            if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = false; }
+            layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_LEFT, left_held);
+            layers.set_layer_state(L_RIGHT, right_held);
         },
         .OnTapEnterBefore => |data| {
             if (data.tap.custom == ENABLE_GAMING) {
