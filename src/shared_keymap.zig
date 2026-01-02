@@ -30,8 +30,8 @@ pub const sides = [key_count]core.Side{
 pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
-         T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), LT(L_NUM, dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
-                    T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
+         T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T( dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
+                    T(dk.X),   T(dk.C),         LT(L_NUM,dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
                                             C(us.ENTER, CUSTOM_LEFT_HOLD),                  C( us.SPACE, CUSTOM_RIGHT_HOLD)
     },
     // L_ARROWS
@@ -207,7 +207,6 @@ fn MO(layer_index: core.LayerIndex) core.KeyDef {
     };
 }
 
-
 fn LT(layer_index: core.LayerIndex, keycode_fire: core.KeyCodeFire) core.KeyDef {
     return core.KeyDef{
         .tap_hold = .{
@@ -275,24 +274,32 @@ fn custom_key(custom_key_val: u8) core.KeyDef {
     };
 }
 
-const CUSTOM_LEFT_HOLD:u8 = 1;
-const CUSTOM_RIGHT_HOLD :u8= 2;
+const CUSTOM_LEFT_HOLD: u8 = 1;
+const CUSTOM_RIGHT_HOLD: u8 = 2;
 var left_held = false;
 var right_held = false;
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
         .OnHoldEnterAfter => |e| {
-            if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = true; }
-            if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = true; }
+            if (e.hold.custom == CUSTOM_LEFT_HOLD) {
+                left_held = true;
+            }
+            if (e.hold.custom == CUSTOM_RIGHT_HOLD) {
+                right_held = true;
+            }
             layers.set_layer_state(L_BOTH, left_held and right_held);
             layers.set_layer_state(L_ARROWS, right_held);
-            var mods = output_queue.get_current_modifiers();        
+            var mods = output_queue.get_current_modifiers();
             mods.right_shift = left_held and !right_held;
             output_queue.set_mods(mods) catch {};
         },
         .OnHoldExitAfter => |e| {
-            if(e.hold.custom == CUSTOM_LEFT_HOLD){ left_held = false; }
-            if(e.hold.custom == CUSTOM_RIGHT_HOLD){ right_held = false; }
+            if (e.hold.custom == CUSTOM_LEFT_HOLD) {
+                left_held = false;
+            }
+            if (e.hold.custom == CUSTOM_RIGHT_HOLD) {
+                right_held = false;
+            }
             layers.set_layer_state(L_BOTH, left_held and right_held);
             layers.set_layer_state(L_ARROWS, right_held);
             var mods = output_queue.get_current_modifiers();
