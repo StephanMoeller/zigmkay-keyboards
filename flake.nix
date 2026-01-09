@@ -1,3 +1,4 @@
+
 {
   description = "zig dev shell";
 
@@ -7,12 +8,19 @@
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-
-
   in {
-    devShells.${system} = {
-      # Default: include both stacks so it runs in either Plasma X11 or Plasma Wayland.
-      default = with pkgs; []
+    devShells.${system}.default = pkgs.mkShell {
+      packages = with pkgs; [
+        zig
+        # optional but common:
+        # zls
+      ];
+
+      # optional sanity check / convenience
+      shellHook = ''
+        echo "zig: $(zig version)"
+      '';
     };
   };
 }
+
