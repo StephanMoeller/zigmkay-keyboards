@@ -71,8 +71,8 @@ pub const keymap = [_][key_count]core.KeyDef{
    },
     // GAMING
     .{
-           T(us.ESCAPE),  T(dk.W),    T(dk.R),    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
-           NONE, T(dk.A), T(dk.S), T(dk.T),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
+           T(us.ESCAPE),  NONE,    T(dk.W),    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
+           NONE, T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
            T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        custom_key(CUSTO_TAP_DISABLE_GAMING),
                                         T(us.SPACE),                  NONE
     },
