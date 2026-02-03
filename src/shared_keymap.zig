@@ -73,7 +73,7 @@ pub const keymap = [_][key_count]core.KeyDef{
     .{
            T(us.ESCAPE),  T(dk.W),    T(dk.R),    NONE,    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
            NONE, T(dk.A), T(dk.S), T(dk.T),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
-           T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        T(us.ESCAPE),
+           T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        custom_key(CUSTO_TAP_DISABLE_GAMING),
                                         T(us.SPACE),                  NONE
     },
 };
@@ -330,6 +330,7 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 layers.set_layer_state(L_GAMING, true);
             }
             if (data.tap.custom == CUSTO_TAP_DISABLE_GAMING) {
+                output_queue.tap_key(us.ESCAPE) catch {};
                 layers.set_layer_state(L_GAMING, false);
             }
             if (data.tap.custom == CUSTOM_TAP_EQ_COL) {
