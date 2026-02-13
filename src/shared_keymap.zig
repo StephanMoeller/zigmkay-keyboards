@@ -43,7 +43,7 @@ pub const keymap = [_][key_count]core.KeyDef{
     },
     // L_NUM
     .{
-       _______,  TC(CUSTOM_TAP_ALT_TAB),  T(dk.R), _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    T(dk.MINS),
+       _______,  TC(CUSTOM_TAP_ALT_TAB),  T(dk.R), _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
        _______,     UNDO,       REDO,     _______, _______,                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), T(dk.PLUS),
                T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
                                                    _______,                C( us.N0, CUSTOM_HOLD_RIGHT)
@@ -72,7 +72,7 @@ pub const keymap = [_][key_count]core.KeyDef{
     // GAMING
     .{
            T(us.ESCAPE),  T(dk.Q),    T(dk.W),    T(dk.E),    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
-           NONE, T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
+           T(dk.F), T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
            T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        custom_key(CUSTO_TAP_DISABLE_GAMING),
                                         T(us.SPACE),                  NONE
     },
@@ -148,6 +148,7 @@ pub const combos = [_]core.Combo2Def{
 
     Combo_Tap_HoldMod(.{ 17, 18 }, L_BASE, dk.MINS, .{ .left_ctrl = true, .left_alt = true }),
     Combo_Tap(.{ 17, 18 }, L_ARROWS, dk.PLUS),
+    Combo_Tap(.{ 17, 18 }, L_NUM, dk.MINS),
     Combo_Tap(.{ 16, 17 }, L_ARROWS, dk.PIPE),
 
     Combo_Tap(.{ 20, 21 }, L_ARROWS, dk.BSLS),
