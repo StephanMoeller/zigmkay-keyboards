@@ -44,7 +44,7 @@ pub const keymap = [_][key_count]core.KeyDef{
     // L_NUM
     .{
        _______,  TC(CUSTOM_TAP_ALT_TAB),  T(dk.R), _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
-       _______,     UNDO,       REDO,     _______, _______,                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), T(dk.PLUS),
+       T(_Gui(us.LEFT)),     UNDO,       _______,     REDO, T(_Gui(us.RIGHT)),                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), T(dk.PLUS),
                T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
                                                    _______,                C( us.N0, CUSTOM_HOLD_RIGHT)
     },
@@ -106,6 +106,17 @@ fn _Sft(fire: core.KeyCodeFire) core.KeyCodeFire {
     }
     return copy;
 }
+
+fn _Gui(fire: core.KeyCodeFire) core.KeyCodeFire {
+    var copy = fire;
+    if (copy.tap_modifiers) |mods| {
+        mods.left_gui = true;
+    } else {
+        copy.tap_modifiers = .{ .left_gui = true };
+    }
+    return copy;
+}
+
 fn C(key_press: core.KeyCodeFire, custom_hold: u8) core.KeyDef {
     return core.KeyDef{
         .tap_hold = .{

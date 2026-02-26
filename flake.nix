@@ -13,7 +13,7 @@
       packages = with pkgs; [
         zig
         # optional but common:
-        # zls
+        zls
       ];
 
       # optional sanity check / convenience
