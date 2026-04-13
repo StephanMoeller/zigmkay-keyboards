@@ -298,6 +298,11 @@ fn custom_key(custom_key_val: u8) core.KeyDef {
 var left_held = false;
 var right_held = false;
 
+fn set_right_shift(output_queue: *core.OutputCommandQueue, state: bool) !void {
+    var mods = output_queue.current_mods;
+    mods.right_shift = state;
+    try output_queue.set_mods(mods);
+}
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
         .OnHoldEnterAfter => |e| {
@@ -308,7 +313,7 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 right_held = true;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held and !right_held);
+            set_right_shift(output_queue, left_held and !right_held) catch {};
             layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnHoldExitAfter => |e| {
@@ -325,7 +330,7 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 right_held = false;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held and !right_held);
+            set_right_shift(output_queue, left_held and !right_held) catch {};
             layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnTapEnterAfter => |data| {
