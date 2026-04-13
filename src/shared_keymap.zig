@@ -297,6 +297,7 @@ fn custom_key(custom_key_val: u8) core.KeyDef {
 
 var left_held = false;
 var right_held = false;
+
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
     switch (event) {
         .OnHoldEnterAfter => |e| {
@@ -307,8 +308,8 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 right_held = true;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held);
-            layers.set_layer_state(L_ARROWS, right_held);
+            layers.set_layer_state(L_NUM, left_held and !right_held);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnHoldExitAfter => |e| {
             if (e.hold.custom == CUSTOM_HOLD_LEFT) {
