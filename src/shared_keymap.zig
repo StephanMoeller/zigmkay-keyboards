@@ -325,8 +325,8 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 right_held = false;
             }
             layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held);
-            layers.set_layer_state(L_ARROWS, right_held);
+            layers.set_layer_state(L_NUM, left_held and !right_held);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnTapEnterAfter => |data| {
             if (data.tap.custom == CUSTOM_TAP_ALT_TAB) {
