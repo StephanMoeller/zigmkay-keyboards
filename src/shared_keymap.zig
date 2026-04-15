@@ -16,10 +16,8 @@ pub const key_count = 30;
 const L_BASE:usize = 0;
 const L_ARROWS:usize = 1;
 const L_NUM:usize = 2;
-const L_EMPTY: usize = 3;
-const L_BOTH:usize = 4;
-const L_WIN:usize = 5;
-const L_GAMING:usize = 6;
+const L_BOTH:usize = 3;
+const L_GAMING:usize = 4;
 
 pub const sides = [key_count]core.Side{
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
@@ -31,12 +29,12 @@ pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
          T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T( dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
-                    T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), LT(L_WIN, dk.DOT),
+                    T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), T(dk.DOT),
                                             C(us.ENTER, CUSTOM_HOLD_LEFT),                  C( us.SPACE, CUSTOM_HOLD_RIGHT)
     },
     // L_ARROWS
     .{
-   T(dk.EXLM),    T(dk.LABK),    GUI(dk.EQL),          T(dk.RABK), T(dk.PERC),             T(dk.SLSH),  T(us.HOME),   AF_fast(us.UP),    T(us.END),  T(dk.APP),
+    T(dk.EXLM),    T(dk.LABK),    GUI(dk.EQL),          T(dk.RABK), T(dk.PERC),             T(dk.SLSH),  T(us.HOME),   AF_fast(us.UP),    T(us.END),  T(dk.APP),
     T(dk.AT), ALT(dk.LCBR), CTL(dk.LPRN),   SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
                   T(dk.HASH),   T(dk.LBRC),  T(dk.RBRC),    _______,                _______,   T(dk.TAB),  CTL(dk.DQUO),      T(us.ESC),
                                                         C(us.SPACE, CUSTOM_HOLD_LEFT),                _______
@@ -48,27 +46,13 @@ pub const keymap = [_][key_count]core.KeyDef{
                T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
                                                    _______,                C( us.N0, CUSTOM_HOLD_RIGHT)
     },
-    // L_EMPTY
-    .{
-            _______, _______, _______, _______, _______,                _______, _______, _______, _______, _______,
-            _______, _______, _______, _______, _______,                _______, _______, _______, _______, _______,
-                     _______, _______, _______, _______,                _______, _______, _______, _______,
-                                             _______,                  _______
-
-    },
-    // BOTH
+        // BOTH
     .{
     PrintStats,   T(us.F7),   T(us.F8),   T(us.F9), T(us.F10),            T(dk.TILD), T(us.SPACE), T(us.SPACE), T(us.SPACE), T(dk.GRV),
     _______, ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BS),  CTL(us.BS),  ALT(us.BS),   _______,
                T(us.F1),   T(us.F2),   T(us.F3), T(us.F12),            T(dk.CIRC),   T(us.DEL),   T(us.DEL),   T(us.DEL),
                                                    _______,              T(dk.N0)
     },
-    .{
-    WinNav(dk.N7), _______, WinNav(dk.N1), WinNav(dk.N6), _______,             _______, _______, _______, _______, _______,
-    WinNav(dk.N4), _______, WinNav(dk.N2), WinNav(dk.N5), _______,             _______, _______, _______, _______, _______,
-                   _______, WinNav(dk.N3), WinNav(dk.N8), _______,             _______, _______, _______, _______,
-                                                          _______,             _______
-   },
     // GAMING
     .{
            T(us.ESCAPE),  T(dk.Q),    T(dk.W),    T(dk.E),    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
