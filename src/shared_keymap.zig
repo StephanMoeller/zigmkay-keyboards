@@ -27,37 +27,37 @@ pub const sides = [key_count]core.Side{
 };
 pub const keymap = [_][key_count]core.KeyDef{
     .{
-         T(dk.Q),   AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),  GUI(dk.O),       T(dk.U), T(dk.QUOT),
-         T(dk.F), ALT(dk.A), CTL(dk.S),         SFT(dk.T), T( dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E),     ALT(dk.I),    T(dk.Y),
-                    T(dk.X),   T(dk.C),         T(dk.D), T(dk.V),                  T(dk.J),  T(dk.H), T(dk.COMMA), T(dk.DOT),
+         T(dk.Q), AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),   GUI(dk.O),   T(dk.U), T(dk.QUOT),
+         T(dk.F),     ALT(dk.A), CTL(dk.S), SFT(dk.T),       T(dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E), ALT(dk.I),    T(dk.Y),
+                        T(dk.X),   T(dk.C),   T(dk.D),       T(dk.V),                  T(dk.J),   T(dk.H), T(dk.COMMA), T(dk.DOT),
                                             C(us.ENTER, CUSTOM_HOLD_LEFT),                  C( us.SPACE, CUSTOM_HOLD_RIGHT)
     },
     // L_ARROWS
     .{
-    T(dk.EXLM),    T(dk.LABK),    GUI(dk.EQL),          T(dk.RABK), T(dk.PERC),             T(dk.SLSH),  T(us.HOME),   AF_fast(us.UP),    T(us.END),  T(dk.APP),
-    T(dk.AT), ALT(dk.LCBR), CTL(dk.LPRN),   SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
-                  T(dk.HASH),   T(dk.LBRC),  T(dk.RBRC),    _______,                _______,   T(dk.TAB),  CTL(dk.DQUO),      T(us.ESC),
+    T(dk.EXLM),   T(dk.LABK),  GUI(dk.EQL),   T(dk.RABK), T(dk.PERC),             T(dk.SLSH),       T(us.HOME),   AF_fast(us.UP),         T(us.END),  T(dk.APP),
+    T(dk.AT),   ALT(dk.LCBR), CTL(dk.LPRN), SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
+                  T(dk.HASH),   T(dk.LBRC),   T(dk.RBRC),    _______,                _______,        T(dk.TAB),     CTL(dk.DQUO),         T(us.ESC),
                                                         C(us.SPACE, CUSTOM_HOLD_LEFT),                _______
     },
     // L_NUM
     .{
-       _______,  TC(CUSTOM_TAP_ALT_TAB),  T(dk.R), _______, _______,                _______,   T(dk.N7),  T(dk.N8),  T(dk.N9),    _______,
-       T(_Gui(us.LEFT)),     UNDO,       _______,     REDO, T(_Gui(us.RIGHT)),                _______, SFT(dk.N4),CTL(dk.N5),ALT(dk.N6), T(dk.PLUS),
-               T(us.ESC), T(_Ctl(dk.C)),T(us.DEL), _______,                PrintStats,   T(dk.N1),  T(dk.N2),  T(dk.N3),
+              _______, TC(CUSTOM_TAP_ALT_TAB),   T(dk.R), _______,           _______,            _______,   T(dk.N7),   T(dk.N8),   T(dk.N9),    _______,
+     T(_Gui(us.LEFT)),                   UNDO,   _______,    REDO, T(_Gui(us.RIGHT)),            _______, SFT(dk.N4), CTL(dk.N5), ALT(dk.N6), T(dk.PLUS),
+            T(us.ESC),          T(_Ctl(dk.C)), T(us.DEL), _______,        PrintStats,           T(dk.N1),   T(dk.N2),   T(dk.N3),
                                                    _______,                C( us.N0, CUSTOM_HOLD_RIGHT)
     },
         // BOTH
     .{
     PrintStats,   T(us.F7),   T(us.F8),   T(us.F9), T(us.F10),            T(dk.TILD), T(us.SPACE), T(us.SPACE), T(us.SPACE), T(dk.GRV),
-    _______, ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BS),  CTL(us.BS),  ALT(us.BS),   _______,
-               T(us.F1),   T(us.F2),   T(us.F3), T(us.F12),            T(dk.CIRC),   T(us.DEL),   T(us.DEL),   T(us.DEL),
+    _______,    ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BS),  CTL(us.BS),  ALT(us.BS),   _______,
+                  T(us.F1),   T(us.F2),   T(us.F3), T(us.F12),            T(dk.CIRC),   T(us.DEL),   T(us.DEL),   T(us.DEL),
                                                    _______,              T(dk.N0)
     },
     // GAMING
     .{
-           T(us.ESCAPE),  T(dk.Q),    T(dk.W),    T(dk.E),    NONE,                   NONE,       NONE,   T(us.UP),        NONE,    custom_key(CUSTO_TAP_DISABLE_GAMING),
-           T(dk.F), T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN), T(us.RIGHT),    NONE,
-           T(dk.G),    T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE,        custom_key(CUSTO_TAP_DISABLE_GAMING),
+      T(us.ESCAPE), T(dk.Q), T(dk.W), T(dk.E),    NONE,                   NONE,       NONE,   T(us.UP),                                  NONE, custom_key(CUSTOM_TAP_DISABLE_GAMING),
+           T(dk.F), T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN),                           T(us.RIGHT), NONE,
+           T(dk.G), T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE, custom_key(CUSTOM_TAP_DISABLE_GAMING),
                                         T(us.SPACE),                  NONE
     },
 };
@@ -266,7 +266,7 @@ fn SFT(keycode_fire: core.KeyCodeFire) core.KeyDef {
 }
 
 const CUSTOM_TAP_ENABLE_GAMING = 1;
-const CUSTO_TAP_DISABLE_GAMING = 2;
+const CUSTOM_TAP_DISABLE_GAMING = 2;
 const CUSTOM_TAP_EQ_COL = 3;
 const CUSTOM_TAP_ALT_TAB: u8 = 4;
 
@@ -326,7 +326,7 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if (data.tap.custom == CUSTOM_TAP_ENABLE_GAMING) {
                 layers.set_layer_state(L_GAMING, true);
             }
-            if (data.tap.custom == CUSTO_TAP_DISABLE_GAMING) {
+            if (data.tap.custom == CUSTOM_TAP_DISABLE_GAMING) {
                 output_queue.tap_key(us.ESCAPE) catch {};
                 layers.set_layer_state(L_GAMING, false);
             }
