@@ -1,13 +1,14 @@
 const std = @import("std");
 
-const zmk = @import("zigmkay");
-const core = zmk.zigmkay.core;
+const zigmkay = @import("zigmkay");
+const core = zigmkay.core;
 const NONE = core.KeyDef.none;
 const _______ = NONE;
-const microzig = zmk.microzig;
+const microzig = zigmkay.microzig;
 const rp2xxx = microzig.hal;
-const dk = zmk.keycodes.dk;
-const us = zmk.keycodes.us;
+const k = zigmkay.keycodes.keycodes;
+const dk = zigmkay.keycodes.danish;
+const us = zigmkay.keycodes.keycodes.kcf;
 
 pub const key_count = 30;
 
@@ -23,20 +24,20 @@ pub const sides = [key_count]core.Side{
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
      .L,.L,.L,.L,       .R,.R,.R,.R,
-              .X,       .X
+             .TL,       .TR
 };
 pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q), AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),   GUI(dk.O),   T(dk.U), T(dk.QUOT),
          T(dk.F),     ALT(dk.A), CTL(dk.S), SFT(dk.T),       T(dk.G),                  T(dk.M), SFT(dk.N),   CTL(dk.E), ALT(dk.I),    T(dk.Y),
-                        T(dk.X),   T(dk.C),   T(dk.D),       T(dk.V),                  T(dk.J),   T(dk.H), T(dk.COMMA), T(dk.DOT),
+                        T(dk.X),   T(dk.C),   T(dk.D),       T(dk.V),                  T(dk.J),   T(dk.H), T(dk.COMM), T(dk.DOT),
                                             C(us.ENTER, CUSTOM_HOLD_LEFT),                  C( us.SPACE, CUSTOM_HOLD_RIGHT)
     },
     // L_ARROWS
     .{
-    T(dk.EXLM),   T(dk.LABK),  GUI(dk.EQL),   T(dk.RABK), T(dk.PERC),             T(dk.SLSH),       T(us.HOME),   AF_fast(us.UP),         T(us.END),  T(dk.APP),
+    T(dk.EXLM),   T(dk.LABK),  GUI(dk.EQL),   T(dk.RABK), T(dk.PERC),             T(dk.SLSH),       T(us.HOME),   AF_fast(us.UP),         T(us.END),  T(us.APP),
     T(dk.AT),   ALT(dk.LCBR), CTL(dk.LPRN), SFT(dk.RPRN), T(dk.RCBR),             T(us.PGUP), AF_fast(us.LEFT), AF_fast(us.DOWN), AF_fast(us.RIGHT), T(us.PGDN),
-                  T(dk.HASH),   T(dk.LBRC),   T(dk.RBRC),    _______,                _______,        T(dk.TAB),     CTL(dk.DQUO),         T(us.ESC),
+                  T(dk.HASH),   T(dk.LBRC),   T(dk.RBRC),    _______,                _______,        T(us.TAB),     CTL(dk.DQUO),         T(us.ESC),
                                                         C(us.SPACE, CUSTOM_HOLD_LEFT),                _______
     },
     // L_NUM
@@ -49,7 +50,7 @@ pub const keymap = [_][key_count]core.KeyDef{
         // BOTH
     .{
     PrintStats,   T(us.F7),   T(us.F8),   T(us.F9), T(us.F10),            T(dk.TILD), T(us.SPACE), T(us.SPACE), T(us.SPACE), T(dk.GRV),
-    _______,    ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BS),  CTL(us.BS),  ALT(us.BS),   _______,
+    _______,    ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BSPC),  CTL(us.BSPC),  ALT(us.BSPC),   _______,
                   T(us.F1),   T(us.F2),   T(us.F3), T(us.F12),            T(dk.CIRC),   T(us.DEL),   T(us.DEL),   T(us.DEL),
                                                    _______,              T(dk.N0)
     },
@@ -112,9 +113,11 @@ fn C(key_press: core.KeyCodeFire, custom_hold: u8) core.KeyDef {
 }
 
 pub const dimensions = core.KeymapDimensions{ .key_count = key_count, .layer_count = keymap.len };
-const PrintStats = core.KeyDef{ .tap_only = .{ .key_press = .{ .tap_keycode = us.KC_PRINT_STATS } } };
+const PrintStats = core.KeyDef{ .tap_only = .{ .key_press = core.KC_PRINT_STATS } };
 const tapping_term = core.TimeSpan{ .ms = 250 };
 const combo_timeout = core.TimeSpan{ .ms = 40 };
+
+const BOOT = core.KC_BOOT;
 
 pub const combos = [_]core.Combo2Def{
     Combo_Tap(.{ 1, 2 }, L_BASE, dk.J),
@@ -125,15 +128,14 @@ pub const combos = [_]core.Combo2Def{
     Combo_Tap_HoldMod(.{ 11, 12 }, L_NUM, _Ctl(dk.X), .{ .left_ctrl = true, .left_shift = true }),
     Combo_Tap_HoldMod(.{ 12, 13 }, L_ARROWS, dk.AMPR, .{ .left_ctrl = true, .left_shift = true }),
 
-    Combo_Tap(.{ 13, 16 }, L_BOTH, core.KeyCodeFire{ .tap_keycode = us.KC_F4, .tap_modifiers = .{ .left_alt = true } }),
+    Combo_Tap(.{ 13, 16 }, L_BOTH, core.KeyCodeFire{ .tap_keycode = us.F4.tap_keycode, .tap_modifiers = .{ .left_alt = true } }),
 
-    Combo_Tap(.{ 23, 24 }, L_BASE, us.BOOT),
-    Combo_Tap(.{ 0, 4 }, L_BASE, us.BOOT),
-    Combo_Tap(.{ 5, 9 }, L_BASE, us.BOOT),
-    Combo_Tap(.{ 6, 7 }, L_BASE, dk.AE),
-    Combo_Tap(.{ 6, 8 }, L_BASE, dk.OE),
-
-    Combo_Tap(.{ 7, 8 }, L_BASE, dk.AA),
+    Combo_Tap(.{ 23, 24 }, L_BASE, BOOT),
+    Combo_Tap(.{ 0, 4 }, L_BASE, BOOT),
+    Combo_Tap(.{ 5, 9 }, L_BASE, BOOT),
+    Combo_Tap(.{ 6, 7 }, L_BASE, dk.AE), //æ
+    Combo_Tap(.{ 6, 8 }, L_BASE, dk.OSTR), //ø
+    Combo_Tap(.{ 7, 8 }, L_BASE, dk.ARNG), //å
 
     Combo_Tap(.{ 7, 8 }, L_ARROWS, dk.QUES),
     Combo_Tap(.{ 7, 8 }, L_BOTH, dk.QUES),
@@ -291,9 +293,9 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = true;
             }
-            layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held and !right_held);
-            layers.set_layer_state(L_ARROWS, right_held and !left_held);
+            layers.set_layer_state(L_BOTH, left_held and right_held, output_queue);
+            layers.set_layer_state(L_NUM, left_held and !right_held, output_queue);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held, output_queue);
         },
         .OnHoldExitAfter => |e| {
             if (e.hold.custom == CUSTOM_HOLD_LEFT) {
@@ -308,9 +310,9 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = false;
             }
-            layers.set_layer_state(L_BOTH, left_held and right_held);
-            layers.set_layer_state(L_NUM, left_held and !right_held);
-            layers.set_layer_state(L_ARROWS, right_held and !left_held);
+            layers.set_layer_state(L_BOTH, left_held and right_held, output_queue);
+            layers.set_layer_state(L_NUM, left_held and !right_held, output_queue);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held, output_queue);
         },
         .OnTapEnterAfter => |data| {
             if (data.tap.custom == CUSTOM_TAP_ALT_TAB) {
@@ -324,11 +326,11 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
         },
         .OnTapEnterBefore => |data| {
             if (data.tap.custom == CUSTOM_TAP_ENABLE_GAMING) {
-                layers.set_layer_state(L_GAMING, true);
+                layers.set_layer_state(L_GAMING, true, output_queue);
             }
             if (data.tap.custom == CUSTOM_TAP_DISABLE_GAMING) {
                 output_queue.tap_key(us.ESCAPE) catch {};
-                layers.set_layer_state(L_GAMING, false);
+                layers.set_layer_state(L_GAMING, false, output_queue);
             }
             if (data.tap.custom == CUSTOM_TAP_EQ_COL) {
                 output_queue.tap_key(us.SPACE) catch {};

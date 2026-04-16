@@ -5,14 +5,12 @@ const rp2xxx = microzig.hal;
 const time = rp2xxx.time;
 const gpio = rp2xxx.gpio;
 const rollercole_shared_keymap = @import("rollercole_shared_keymap");
-const zmk = @import("zigmkay");
-const zigmkay = zmk.zigmkay;
-const dk = zmk.keyycodes.dk;
+const zigmkay = @import("zigmkay");
+const dk = zigmkay.keycodes.dk;
 const core = zigmkay.core;
-const us = zmk.keyycodes.us;
+const us = zigmkay.keycodes.us;
 
 // uart
-
 const uart_tx_pin = gpio.num(0);
 const uart_rx_pin = gpio.num(1);
 
@@ -65,11 +63,11 @@ const primary = true;
 pub fn main() !void {
 
     // Init pins
-    pin_config.apply(); // dont know how this could be done inside the module, but it needs to be done for things to work
+    _ = pin_config.apply(); // dont know how this could be done inside the module, but it needs to be done for things to work
     const uart = init_uart();
     if (primary) {
         blink_led(1, 300);
-        zigmkay.run_primary(
+        zigmkay.loops.run_primary(
             rollercole_shared_keymap.dimensions,
             clacky_pin_cols[0..],
             clacky_pin_rows[0..],
@@ -80,18 +78,20 @@ pub fn main() !void {
             &rollercole_shared_keymap.keymap,
             rollercole_shared_keymap.sides,
             uart,
+            null,
         ) catch {
             blink_led(100000, 50);
         };
     } else {
         blink_led(5, 50);
-        zigmkay.run_secondary(
+        zigmkay.loops.run_secondary(
             rollercole_shared_keymap.dimensions,
             clacky_pin_cols[0..],
             clacky_pin_rows[0..],
             scanner_settings,
             pin_mappings_left,
             uart,
+            null,
         ) catch {
             blink_led(100000, 50);
         };

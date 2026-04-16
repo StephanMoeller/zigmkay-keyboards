@@ -152,15 +152,14 @@ fn SFT(keycode_fire: core.KeyCodeFire) core.KeyDef {
 }
 
 fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_queue: *core.OutputCommandQueue) void {
-    _ = output_queue;
     switch (event) {
         .OnHoldEnterAfter => |data| {
             _ = data;
-            layers.set_layer_state(3, layers.is_layer_active(1) and layers.is_layer_active(2));
+            layers.set_layer_state(3, layers.is_layer_active(1) and layers.is_layer_active(2), output_queue);
         },
         .OnHoldExitAfter => |data| {
             _ = data;
-            layers.set_layer_state(3, layers.is_layer_active(1) and layers.is_layer_active(2));
+            layers.set_layer_state(3, layers.is_layer_active(1) and layers.is_layer_active(2), output_queue);
         },
         else => {},
     }
