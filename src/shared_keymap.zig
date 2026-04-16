@@ -26,6 +26,7 @@ pub const sides = [key_count]core.Side{
      .L,.L,.L,.L,       .R,.R,.R,.R,
              .TL,       .TR
 };
+
 pub const keymap = [_][key_count]core.KeyDef{
     .{
          T(dk.Q), AF_slow(dk.W), GUI(dk.R),   T(dk.P), AF_slow(dk.B),                  T(dk.K),   T(dk.L),   GUI(dk.O),   T(dk.U), T(dk.QUOT),
@@ -50,7 +51,7 @@ pub const keymap = [_][key_count]core.KeyDef{
         // BOTH
     .{
     PrintStats,   T(us.F7),   T(us.F8),   T(us.F9), T(us.F10),            T(dk.TILD), T(us.SPACE), T(us.SPACE), T(us.SPACE), T(dk.GRV),
-    _______,    ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BSPC),  CTL(us.BSPC),  ALT(us.BSPC),   _______,
+        mouse_test,    ALT(us.F4), CTL(us.F5), SFT(us.F6), T(us.F11),             T(dk.DLR),  SFT(us.BSPC),  CTL(us.BSPC),  ALT(us.BSPC),   _______,
                   T(us.F1),   T(us.F2),   T(us.F3), T(us.F12),            T(dk.CIRC),   T(us.DEL),   T(us.DEL),   T(us.DEL),
                                                    _______,              T(dk.N0)
     },
@@ -62,10 +63,15 @@ pub const keymap = [_][key_count]core.KeyDef{
                                         T(us.SPACE),                  NONE
     },
 };
-
-
-
 // zig fmt: on
+
+const mouse_test = core.KeyDef{
+    .tap_only = core.TapDef{
+        .mouse_action = .LeftClick,
+    },
+};
+
+//
 const LEFT_THUMB = 1;
 const RIGHT_THUMB = 2;
 
@@ -339,13 +345,7 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
                 output_queue.tap_key(us.SPACE) catch {};
             }
         },
-        .OnTapExitAfter => |data| {
-            if (data.tap.key_press) |key_fire| {
-                if (key_fire.dead) {
-                    output_queue.tap_key(us.SPACE) catch {};
-                }
-            }
-        },
+        .OnTapExitAfter => |_| {},
         else => {},
     }
 }
