@@ -7,6 +7,8 @@ const MicroBuild = microzig.MicroBuild(.{
 });
 
 pub fn build(b: *std.Build) void {
+    const keyboard = b.option([]const u8, "keyboard", "Keyboard name (e.g. clackychan)") orelse @panic("Please specify a -Dkeyboard parameter, eg zig build -Dkeyboard=my_keyboard_name where 'my_keyboard_name' is the name of the folder container the main.zig for the keyboard configuration");
+
     const mz_dep = b.dependency("microzig", .{});
     const mb = MicroBuild.init(b, mz_dep) orelse return;
 
@@ -23,11 +25,13 @@ pub fn build(b: *std.Build) void {
         .imports = &.{.{ .name = "zigmkay", .module = zigmkay_mod }},
     });
 
+    std.debug.print("building keyboard '{s}'\n", .{keyboard});
+    const root_source_file = std.fmt.allocPrint(b.allocator, "src/{s}/main.zig", .{keyboard}) catch @panic("Keyboard folder not found");
     const firmware = mb.add_firmware(.{
         .name = "zigmkay",
         .target = &target,
         .optimize = optimize,
-        .root_source_file = b.path("src/clackychan/main.zig"),
+        .root_source_file = b.path(root_source_file),
         .imports = &.{
             // TOOD: Move back to normal imports once working
             // .{ .name = "zigmkay", .module = zigmkay_mod },
