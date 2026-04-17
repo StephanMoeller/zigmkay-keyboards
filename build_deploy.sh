@@ -3,7 +3,8 @@ clear
 set -e  # Exit on any error
 
 echo "Building firmware..."
-zig build -Dkeyboard=clackychan2
+#zig build -Dkeyboard=clackychan2
+zig build -Dkeyboard=clackychan
 
 FIRMWARE="zig-out/firmware/zigmkay.uf2"
 MOUNT_POINT="/run/media/stephan/RPI-RP2"

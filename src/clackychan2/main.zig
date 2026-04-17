@@ -59,7 +59,6 @@ pub fn main() !void {
         &rollercole_shared_keymap.keymap,
         rollercole_shared_keymap.sides,
         null,
-        null,
     ) catch {
         blink_led(100000, 50);
     };

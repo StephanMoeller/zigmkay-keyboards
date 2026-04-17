@@ -3,9 +3,9 @@ const std = @import("std");
 const zigmkay = @import("zigmkay");
 const core = zigmkay.core;
 const _______ = core.KeyDef.none;
-const keycodes = @import("zkeycodes").layouts;
+const keycodes = @import("keycodes/root.zig");
 const dk = keycodes.danish;
-const us = keycodes.keycodes.kcf;
+const us = keycodes.kcf;
 
 pub const key_count = 30;
 
@@ -21,7 +21,7 @@ pub const sides = [key_count]core.Side{
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
   .L,.L,.L,.L,.L,       .R,.R,.R,.R,.R,
      .L,.L,.L,.L,       .R,.R,.R,.R,
-             .TL,       .TR
+             .X,       .X
 };
 
 pub const keymap = [_][key_count]core.KeyDef{
@@ -64,7 +64,7 @@ pub const keymap = [_][key_count]core.KeyDef{
 
 const mouse_test = core.KeyDef{
     .tap_only = core.TapDef{
-        .mouse_action = .LeftClick,
+        .mouse_action = .LeftButton,
     },
 };
 
@@ -296,9 +296,9 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = true;
             }
-            layers.set_layer_state(L_BOTH, left_held and right_held, output_queue);
-            layers.set_layer_state(L_NUM, left_held and !right_held, output_queue);
-            layers.set_layer_state(L_ARROWS, right_held and !left_held, output_queue);
+            layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_NUM, left_held and !right_held);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnHoldExitAfter => |e| {
             if (e.hold.custom == CUSTOM_HOLD_LEFT) {
@@ -313,9 +313,9 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
             if (e.hold.custom == CUSTOM_HOLD_RIGHT) {
                 right_held = false;
             }
-            layers.set_layer_state(L_BOTH, left_held and right_held, output_queue);
-            layers.set_layer_state(L_NUM, left_held and !right_held, output_queue);
-            layers.set_layer_state(L_ARROWS, right_held and !left_held, output_queue);
+            layers.set_layer_state(L_BOTH, left_held and right_held);
+            layers.set_layer_state(L_NUM, left_held and !right_held);
+            layers.set_layer_state(L_ARROWS, right_held and !left_held);
         },
         .OnTapEnterAfter => |data| {
             if (data.tap.custom == CUSTOM_TAP_ALT_TAB) {
@@ -329,11 +329,11 @@ fn on_event(event: core.ProcessorEvent, layers: *core.LayerActivations, output_q
         },
         .OnTapEnterBefore => |data| {
             if (data.tap.custom == CUSTOM_TAP_ENABLE_GAMING) {
-                layers.set_layer_state(L_GAMING, true, output_queue);
+                layers.set_layer_state(L_GAMING, true);
             }
             if (data.tap.custom == CUSTOM_TAP_DISABLE_GAMING) {
                 output_queue.tap_key(us.ESCAPE) catch {};
-                layers.set_layer_state(L_GAMING, false, output_queue);
+                layers.set_layer_state(L_GAMING, false);
             }
             if (data.tap.custom == CUSTOM_TAP_EQ_COL) {
                 output_queue.tap_key(us.SPACE) catch {};
