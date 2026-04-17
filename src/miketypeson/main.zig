@@ -58,5 +58,4 @@ pub fn main() !void {
         ) catch {
 
         };
-    
 }

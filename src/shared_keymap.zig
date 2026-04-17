@@ -64,7 +64,7 @@ pub const keymap = [_][key_count]core.KeyDef{
 
 const mouse_test = core.KeyDef{
     .tap_only = core.TapDef{
-        .mouse_action = .LeftButton,
+        .mouse_action = .WheelUp,
     },
 };
 
