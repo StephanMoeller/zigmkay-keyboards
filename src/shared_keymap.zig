@@ -6,9 +6,10 @@ const NONE = core.KeyDef.none;
 const _______ = NONE;
 const microzig = zigmkay.microzig;
 const rp2xxx = microzig.hal;
-const k = zigmkay.keycodes.keycodes;
-const dk = zigmkay.keycodes.danish;
-const us = zigmkay.keycodes.keycodes.kcf;
+const keycodes = @import("zkeycodes").layouts;
+const k = keycodes.keycodes;
+const dk = keycodes.danish;
+const us = keycodes.keycodes.kcf;
 
 pub const key_count = 30;
 

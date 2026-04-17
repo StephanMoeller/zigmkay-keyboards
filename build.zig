@@ -9,6 +9,9 @@ const MicroBuild = microzig.MicroBuild(.{
 pub fn build(b: *std.Build) void {
     const keyboard = b.option([]const u8, "keyboard", "Keyboard name (e.g. clackychan)") orelse @panic("Please specify a -Dkeyboard parameter, eg zig build -Dkeyboard=my_keyboard_name where 'my_keyboard_name' is the name of the folder container the main.zig for the keyboard configuration");
 
+    const zkeycodes_dep = b.dependency("zkeycodes", .{});
+    const zkeycodes_mod = zkeycodes_dep.module("zkeycodes");
+
     const mz_dep = b.dependency("microzig", .{});
     const mb = MicroBuild.init(b, mz_dep) orelse return;
 
@@ -24,6 +27,7 @@ pub fn build(b: *std.Build) void {
         },
         .imports = &.{.{ .name = "zigmkay", .module = zigmkay_mod }},
     });
+    rollercole_keymap_mod.addImport("zkeycodes", zkeycodes_mod);
 
     std.debug.print("building keyboard '{s}'\n", .{keyboard});
     const root_source_file = std.fmt.allocPrint(b.allocator, "src/{s}/main.zig", .{keyboard}) catch @panic("Keyboard folder not found");
