@@ -2,12 +2,8 @@ const std = @import("std");
 
 const zigmkay = @import("zigmkay");
 const core = zigmkay.core;
-const NONE = core.KeyDef.none;
-const _______ = NONE;
-const microzig = zigmkay.microzig;
-const rp2xxx = microzig.hal;
+const _______ = core.KeyDef.none;
 const keycodes = @import("zkeycodes").layouts;
-const k = keycodes.keycodes;
 const dk = keycodes.danish;
 const us = keycodes.keycodes.kcf;
 
@@ -58,10 +54,10 @@ pub const keymap = [_][key_count]core.KeyDef{
     },
     // GAMING
     .{
-      T(us.ESCAPE), T(dk.Q), T(dk.W), T(dk.E),    NONE,                   NONE,       NONE,   T(us.UP),                                  NONE, custom_key(CUSTOM_TAP_DISABLE_GAMING),
-           T(dk.F), T(dk.A), T(dk.S), T(dk.D),    NONE,                   NONE, T(us.LEFT), T(us.DOWN),                           T(us.RIGHT), NONE,
-           T(dk.G), T(dk.G),    NONE,    NONE,                            NONE,       NONE,       NONE, custom_key(CUSTOM_TAP_DISABLE_GAMING),
-                                        T(us.SPACE),                  NONE
+      T(us.ESCAPE), T(dk.Q), T(dk.W), T(dk.E),    _______,                   _______,       _______,   T(us.UP),                                  _______, custom_key(CUSTOM_TAP_DISABLE_GAMING),
+           T(dk.F), T(dk.A), T(dk.S), T(dk.D),    _______,                   _______, T(us.LEFT), T(us.DOWN),                           T(us.RIGHT), _______,
+           T(dk.G), T(dk.G),    _______,    _______,                            _______,       _______,       _______, custom_key(CUSTOM_TAP_DISABLE_GAMING),
+                                        T(us.SPACE),                  _______
     },
 };
 // zig fmt: on
