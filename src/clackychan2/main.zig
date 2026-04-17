@@ -10,10 +10,6 @@ const dk = zigmkay.keycodes.dk;
 const core = zigmkay.core;
 const us = zigmkay.keycodes.us;
 
-// uart
-const uart_tx_pin = gpio.num(0);
-const uart_rx_pin = gpio.num(1);
-
 // zig fmt: off
 pub const pin_config = rp2xxx.pins.GlobalConfiguration{
     .GPIO17 = .{ .name = "led", .direction = .out },
@@ -67,15 +63,6 @@ pub fn main() !void {
     ) catch {
         blink_led(100000, 50);
     };
-}
-
-pub fn init_uart() rp2xxx.uart.UART {
-    // uart init
-    uart_tx_pin.set_function(.uart);
-    uart_rx_pin.set_function(.uart);
-    const uart = rp2xxx.uart.instance.num(0);
-    uart.apply(.{ .clock_config = rp2xxx.clock_config, .baud_rate = 9600 });
-    return uart;
 }
 
 pub fn blink_led(blink_count: u32, interval_ms: u32) void {
